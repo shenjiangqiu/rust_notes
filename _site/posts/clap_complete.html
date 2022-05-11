@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta charset="utf-8">
+  <title>Cobalt::clap_complete</title>
+<link rel="stylesheet" href="/public/css/styles.css">
+  </head>
+  <body>
+    <header>
+      <div class="inner">
+  <div class="primary">
+    <h1><a href="/">
+      <img src="/public/images/sjq.png" width="100" />
+    </a></h1>
+  </div>
+  <div class="secondary">
+      <nav>
+    <a href="/" class="button start"><span>Start</span></a>
+    <a href="/TODO" class="button docs"><span>TODO</span></a>
+    <a href="/TODO" class="button news"><span>TODO</span></a>
+    <a href="/TODO" class="button contrib"><span>TODO</span></a>
+    <a href="/TODO" class="button help"><span>TODO</span></a>
+  </nav>
+  </div>
+</div>
+    </header>
+    <main>
+      <h1>clap complete</h1>
+<h2>links</h2>
+<ul>
+<li><a href="https://crates.io/crates/clap_complete">clap_complete</a></li>
+<li><a href="./zsh_comp.html">zsh completion function</a></li>
+</ul>
+<h2>example</h2>
+<ul>
+<li>args:</li>
+</ul>
+<pre style="background-color:#2b303b;">
+<span style="color:#b48ead;">use </span><span style="color:#c0c5ce;">std::path::PathBuf;
+</span><span style="color:#c0c5ce;">
+</span><span style="color:#b48ead;">use </span><span style="color:#c0c5ce;">clap::{Parser, ValueHint};
+</span><span style="color:#b48ead;">use </span><span style="color:#c0c5ce;">clap_complete::Shell;
+</span><span style="color:#c0c5ce;">
+</span><span style="color:#c0c5ce;">#[</span><span style="color:#bf616a;">derive</span><span style="color:#c0c5ce;">(Parser, Debug)]
+</span><span style="color:#c0c5ce;">#[</span><span style="color:#bf616a;">clap</span><span style="color:#c0c5ce;">(author=&quot;</span><span style="color:#a3be8c;">Jiangqiu Shen</span><span style="color:#c0c5ce;">&quot;,version,about=&quot;</span><span style="color:#a3be8c;">a spmm pim simulator</span><span style="color:#c0c5ce;">&quot;,long_about=None,trailing_var_arg=true)]
+</span><span style="color:#b48ead;">pub struct </span><span style="color:#c0c5ce;">Args {
+</span><span style="color:#c0c5ce;">    </span><span style="color:#65737e;">/// Generate completion for the given shell
+</span><span style="color:#c0c5ce;">    #[clap(long = &quot;generate&quot;, short = &#39;g&#39;, arg_enum)]
+</span><span style="color:#c0c5ce;">    </span><span style="color:#b48ead;">pub </span><span style="color:#bf616a;">generator</span><span style="color:#c0c5ce;">: Option&lt;Shell&gt;,
+</span><span style="color:#c0c5ce;">
+</span><span style="color:#c0c5ce;">    </span><span style="color:#65737e;">/// the path of config file, default is &quot;default.toml&quot;
+</span><span style="color:#c0c5ce;">    #[clap(parse(from_os_str),value_hint=</span><span style="color:#bf616a;">ValueHint</span><span style="color:#c0c5ce;">::FilePath)]
+</span><span style="color:#c0c5ce;">    pub config_file: Vec&lt;PathBuf&gt;,
+</span><span style="color:#c0c5ce;">}
+</span><span style="color:#c0c5ce;">
+</span></pre>
+<ul>
+<li>main</li>
+</ul>
+<pre style="background-color:#2b303b;">
+<span style="color:#b48ead;">use </span><span style="color:#c0c5ce;">clap::{Command, IntoApp, Parser};
+</span><span style="color:#b48ead;">use </span><span style="color:#c0c5ce;">clap_complete::Generator;
+</span><span style="color:#b48ead;">fn </span><span style="color:#8fa1b3;">main</span><span style="color:#c0c5ce;">() -&gt; Result&lt;()&gt;{
+</span><span style="color:#c0c5ce;">    </span><span style="color:#b48ead;">if let </span><span style="color:#c0c5ce;">Some(generator) = args.generator {
+</span><span style="color:#c0c5ce;">        </span><span style="color:#b48ead;">let mut</span><span style="color:#c0c5ce;"> cmd = Args::command();
+</span><span style="color:#c0c5ce;">        eprintln!(&quot;</span><span style="color:#a3be8c;">Generating completion file for {:?}...</span><span style="color:#c0c5ce;">&quot;, generator);
+</span><span style="color:#c0c5ce;">        </span><span style="color:#96b5b4;">print_completions</span><span style="color:#c0c5ce;">(generator, &amp;</span><span style="color:#b48ead;">mut</span><span style="color:#c0c5ce;"> cmd);
+</span><span style="color:#c0c5ce;">        </span><span style="color:#b48ead;">return </span><span style="color:#c0c5ce;">Ok(());
+</span><span style="color:#c0c5ce;">    }
+</span><span style="color:#c0c5ce;">}
+</span><span style="color:#c0c5ce;">
+</span><span style="color:#b48ead;">fn </span><span style="color:#8fa1b3;">print_completions</span><span style="color:#c0c5ce;">&lt;G: Generator&gt;(</span><span style="color:#bf616a;">gen</span><span style="color:#c0c5ce;">: G, </span><span style="color:#bf616a;">cmd</span><span style="color:#c0c5ce;">: &amp;</span><span style="color:#b48ead;">mut</span><span style="color:#c0c5ce;"> Command) {
+</span><span style="color:#c0c5ce;">    clap_complete::generate(gen, cmd, cmd.</span><span style="color:#96b5b4;">get_name</span><span style="color:#c0c5ce;">().</span><span style="color:#96b5b4;">to_string</span><span style="color:#c0c5ce;">(), &amp;</span><span style="color:#b48ead;">mut </span><span style="color:#c0c5ce;">io::stdout());
+</span><span style="color:#c0c5ce;">}
+</span></pre>
+    </main>
+    <footer>
+      <div class="inner">
+  <p>Made by SJQ! 🐼</p>
+</div>
+    </footer>
+  </body>
+</html>

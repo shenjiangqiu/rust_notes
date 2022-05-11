@@ -1,0 +1,7 @@
+source: "."
+site:
+  title: cobalt blog
+  description: Blog Posts Go Here
+  base_url: .
+posts:
+  rss: rss.xml

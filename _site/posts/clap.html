@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta charset="utf-8">
+  <title>Cobalt::clap</title>
+<link rel="stylesheet" href="/public/css/styles.css">
+  </head>
+  <body>
+    <header>
+      <div class="inner">
+  <div class="primary">
+    <h1><a href="/">
+      <img src="/public/images/sjq.png" width="100" />
+    </a></h1>
+  </div>
+  <div class="secondary">
+      <nav>
+    <a href="/" class="button start"><span>Start</span></a>
+    <a href="/TODO" class="button docs"><span>TODO</span></a>
+    <a href="/TODO" class="button news"><span>TODO</span></a>
+    <a href="/TODO" class="button contrib"><span>TODO</span></a>
+    <a href="/TODO" class="button help"><span>TODO</span></a>
+  </nav>
+  </div>
+</div>
+    </header>
+    <main>
+      <h1>clap</h1>
+<h2>links</h2>
+<ul>
+<li>crates: <a href="https://crates.io/crates/clap">crates</a></li>
+<li>doc: <a href="https://docs.rs/clap/latest/clap/">doc</a></li>
+<li>github: <a href="https://github.com/clap-rs/clap">git</a></li>
+</ul>
+<h2>related crates:</h2>
+<ul>
+<li><a href="https://crates.io/crates/clap_mangen">clap_mangen</a></li>
+<li><a href="./clap_complete.html">clap_complete</a></li>
+</ul>
+<h2>example code</h2>
+<ul>
+<li>basic usage</li>
+</ul>
+<pre style="background-color:#2b303b;">
+<span style="color:#b48ead;">use </span><span style="color:#c0c5ce;">clap::{AppSettings, Parser};
+</span><span style="color:#c0c5ce;">
+</span><span style="color:#c0c5ce;">#[</span><span style="color:#bf616a;">derive</span><span style="color:#c0c5ce;">(Parser)]
+</span><span style="color:#c0c5ce;">#[</span><span style="color:#bf616a;">clap</span><span style="color:#c0c5ce;">(author, version, about, long_about = None)]
+</span><span style="color:#c0c5ce;">#[</span><span style="color:#bf616a;">clap</span><span style="color:#c0c5ce;">(args_override_self = true)]
+</span><span style="color:#c0c5ce;">#[</span><span style="color:#bf616a;">clap</span><span style="color:#c0c5ce;">(allow_negative_numbers = true)]
+</span><span style="color:#c0c5ce;">#[</span><span style="color:#bf616a;">clap</span><span style="color:#c0c5ce;">(</span><span style="color:#8fa1b3;">global_setting</span><span style="color:#c0c5ce;">(AppSettings::DeriveDisplayOrder))]
+</span><span style="color:#b48ead;">struct </span><span style="color:#c0c5ce;">Cli {
+</span><span style="color:#c0c5ce;">    #[clap(long)]
+</span><span style="color:#c0c5ce;">    </span><span style="color:#bf616a;">two</span><span style="color:#c0c5ce;">: String,
+</span><span style="color:#c0c5ce;">    #[clap(long)]
+</span><span style="color:#c0c5ce;">    </span><span style="color:#bf616a;">one</span><span style="color:#c0c5ce;">: String,
+</span><span style="color:#c0c5ce;">}
+</span><span style="color:#c0c5ce;">
+</span><span style="color:#b48ead;">fn </span><span style="color:#8fa1b3;">main</span><span style="color:#c0c5ce;">() {
+</span><span style="color:#c0c5ce;">    </span><span style="color:#b48ead;">let</span><span style="color:#c0c5ce;"> cli = Cli::parse();
+</span><span style="color:#c0c5ce;">
+</span><span style="color:#c0c5ce;">    println!(&quot;</span><span style="color:#a3be8c;">two: </span><span style="color:#d08770;">{:?}</span><span style="color:#c0c5ce;">&quot;, cli.two);
+</span><span style="color:#c0c5ce;">    println!(&quot;</span><span style="color:#a3be8c;">one: </span><span style="color:#d08770;">{:?}</span><span style="color:#c0c5ce;">&quot;, cli.one);
+</span><span style="color:#c0c5ce;">}
+</span></pre>
+<ul>
+<li>prositional:</li>
+</ul>
+<pre style="background-color:#2b303b;">
+<span style="color:#b48ead;">use </span><span style="color:#c0c5ce;">clap::Parser;
+</span><span style="color:#c0c5ce;">
+</span><span style="color:#c0c5ce;">#[</span><span style="color:#bf616a;">derive</span><span style="color:#c0c5ce;">(Parser)]
+</span><span style="color:#c0c5ce;">#[</span><span style="color:#bf616a;">clap</span><span style="color:#c0c5ce;">(author, version, about, long_about = None)]
+</span><span style="color:#b48ead;">struct </span><span style="color:#c0c5ce;">Cli {
+</span><span style="color:#c0c5ce;">   </span><span style="color:#bf616a;">name</span><span style="color:#c0c5ce;">: Option&lt;String&gt;,
+</span><span style="color:#c0c5ce;">}
+</span><span style="color:#c0c5ce;">
+</span><span style="color:#b48ead;">fn </span><span style="color:#8fa1b3;">main</span><span style="color:#c0c5ce;">() {
+</span><span style="color:#c0c5ce;">   </span><span style="color:#b48ead;">let</span><span style="color:#c0c5ce;"> cli = Cli::parse();
+</span><span style="color:#c0c5ce;">
+</span><span style="color:#c0c5ce;">   println!(&quot;</span><span style="color:#a3be8c;">name: </span><span style="color:#d08770;">{:?}</span><span style="color:#c0c5ce;">&quot;, cli.name.</span><span style="color:#96b5b4;">as_deref</span><span style="color:#c0c5ce;">());
+</span><span style="color:#c0c5ce;">}
+</span></pre>
+<ul>
+<li>subcommands:</li>
+</ul>
+<pre style="background-color:#2b303b;">
+<span style="color:#b48ead;">use </span><span style="color:#c0c5ce;">clap::{Parser, Subcommand};
+</span><span style="color:#c0c5ce;">
+</span><span style="color:#c0c5ce;">#[</span><span style="color:#bf616a;">derive</span><span style="color:#c0c5ce;">(Parser)]
+</span><span style="color:#c0c5ce;">#[</span><span style="color:#bf616a;">clap</span><span style="color:#c0c5ce;">(author, version, about, long_about = None)]
+</span><span style="color:#c0c5ce;">#[</span><span style="color:#bf616a;">clap</span><span style="color:#c0c5ce;">(propagate_version = true)]
+</span><span style="color:#b48ead;">struct </span><span style="color:#c0c5ce;">Cli {
+</span><span style="color:#c0c5ce;">    #[clap(subcommand)]
+</span><span style="color:#c0c5ce;">    </span><span style="color:#bf616a;">command</span><span style="color:#c0c5ce;">: Commands,
+</span><span style="color:#c0c5ce;">}
+</span><span style="color:#c0c5ce;">
+</span><span style="color:#c0c5ce;">#[</span><span style="color:#bf616a;">derive</span><span style="color:#c0c5ce;">(Subcommand)]
+</span><span style="color:#b48ead;">enum </span><span style="color:#c0c5ce;">Commands {
+</span><span style="color:#c0c5ce;">    </span><span style="color:#65737e;">/// Adds files to myapp
+</span><span style="color:#c0c5ce;">    Add { name: Option&lt;String&gt; },
+</span><span style="color:#c0c5ce;">}
+</span></pre>
+<ul>
+<li>defaults</li>
+</ul>
+<pre style="background-color:#2b303b;">
+<span style="color:#b48ead;">use </span><span style="color:#c0c5ce;">clap::Parser;
+</span><span style="color:#c0c5ce;">
+</span><span style="color:#c0c5ce;">#[</span><span style="color:#bf616a;">derive</span><span style="color:#c0c5ce;">(Parser)]
+</span><span style="color:#c0c5ce;">#[</span><span style="color:#bf616a;">clap</span><span style="color:#c0c5ce;">(author, version, about, long_about = None)]
+</span><span style="color:#b48ead;">struct </span><span style="color:#c0c5ce;">Cli {
+</span><span style="color:#c0c5ce;">    #[clap(default_value_t = </span><span style="color:#bf616a;">String</span><span style="color:#c0c5ce;">::from(&quot;alice&quot;))]
+</span><span style="color:#c0c5ce;">    name: String,
+</span><span style="color:#c0c5ce;">}
+</span><span style="color:#c0c5ce;">
+</span><span style="color:#b48ead;">fn </span><span style="color:#8fa1b3;">main</span><span style="color:#c0c5ce;">() {
+</span><span style="color:#c0c5ce;">    </span><span style="color:#b48ead;">let</span><span style="color:#c0c5ce;"> cli = Cli::parse();
+</span><span style="color:#c0c5ce;">
+</span><span style="color:#c0c5ce;">    println!(&quot;</span><span style="color:#a3be8c;">name: </span><span style="color:#d08770;">{:?}</span><span style="color:#c0c5ce;">&quot;, cli.name);
+</span><span style="color:#c0c5ce;">}
+</span></pre>
+<ul>
+<li>enums</li>
+</ul>
+<pre style="background-color:#2b303b;">
+<span style="color:#b48ead;">use </span><span style="color:#c0c5ce;">clap::{ArgEnum, Parser};
+</span><span style="color:#c0c5ce;">
+</span><span style="color:#c0c5ce;">#[</span><span style="color:#bf616a;">derive</span><span style="color:#c0c5ce;">(Parser)]
+</span><span style="color:#c0c5ce;">#[</span><span style="color:#bf616a;">clap</span><span style="color:#c0c5ce;">(author, version, about, long_about = None)]
+</span><span style="color:#b48ead;">struct </span><span style="color:#c0c5ce;">Cli {
+</span><span style="color:#c0c5ce;">    </span><span style="color:#65737e;">/// What mode to run the program in
+</span><span style="color:#c0c5ce;">    #[clap(arg_enum)]
+</span><span style="color:#c0c5ce;">    </span><span style="color:#bf616a;">mode</span><span style="color:#c0c5ce;">: Mode,
+</span><span style="color:#c0c5ce;">}
+</span><span style="color:#c0c5ce;">
+</span><span style="color:#c0c5ce;">#[</span><span style="color:#bf616a;">derive</span><span style="color:#c0c5ce;">(Copy, Clone, PartialEq, Eq, PartialOrd, Ord, ArgEnum)]
+</span><span style="color:#b48ead;">enum </span><span style="color:#c0c5ce;">Mode {
+</span><span style="color:#c0c5ce;">    Fast,
+</span><span style="color:#c0c5ce;">    Slow,
+</span><span style="color:#c0c5ce;">}
+</span></pre>
+<ul>
+<li>parse</li>
+</ul>
+<pre style="background-color:#2b303b;">
+<span style="color:#b48ead;">use </span><span style="color:#c0c5ce;">clap::Parser;
+</span><span style="color:#c0c5ce;">
+</span><span style="color:#c0c5ce;">#[</span><span style="color:#bf616a;">derive</span><span style="color:#c0c5ce;">(Parser)]
+</span><span style="color:#c0c5ce;">#[</span><span style="color:#bf616a;">clap</span><span style="color:#c0c5ce;">(author, version, about, long_about = None)]
+</span><span style="color:#b48ead;">struct </span><span style="color:#c0c5ce;">Cli {
+</span><span style="color:#c0c5ce;">    </span><span style="color:#65737e;">/// Network port to use
+</span><span style="color:#c0c5ce;">    #[clap(parse(try_from_str))]
+</span><span style="color:#c0c5ce;">    </span><span style="color:#bf616a;">port</span><span style="color:#c0c5ce;">: </span><span style="color:#b48ead;">usize</span><span style="color:#c0c5ce;">,
+</span><span style="color:#c0c5ce;">}
+</span></pre>
+<ul>
+<li>validate</li>
+</ul>
+<pre style="background-color:#2b303b;">
+<span style="color:#b48ead;">use </span><span style="color:#c0c5ce;">std::ops::RangeInclusive;
+</span><span style="color:#c0c5ce;">
+</span><span style="color:#b48ead;">use </span><span style="color:#c0c5ce;">clap::Parser;
+</span><span style="color:#c0c5ce;">
+</span><span style="color:#c0c5ce;">#[</span><span style="color:#bf616a;">derive</span><span style="color:#c0c5ce;">(Parser)]
+</span><span style="color:#c0c5ce;">#[</span><span style="color:#bf616a;">clap</span><span style="color:#c0c5ce;">(author, version, about, long_about = None)]
+</span><span style="color:#b48ead;">struct </span><span style="color:#c0c5ce;">Cli {
+</span><span style="color:#c0c5ce;">    </span><span style="color:#65737e;">/// Network port to use
+</span><span style="color:#c0c5ce;">    #[clap(parse(try_from_str=port_in_range))]
+</span><span style="color:#c0c5ce;">    </span><span style="color:#bf616a;">port</span><span style="color:#c0c5ce;">: </span><span style="color:#b48ead;">usize</span><span style="color:#c0c5ce;">,
+</span><span style="color:#c0c5ce;">}
+</span><span style="color:#c0c5ce;">
+</span><span style="color:#b48ead;">fn </span><span style="color:#8fa1b3;">main</span><span style="color:#c0c5ce;">() {
+</span><span style="color:#c0c5ce;">    </span><span style="color:#b48ead;">let</span><span style="color:#c0c5ce;"> cli = Cli::parse();
+</span><span style="color:#c0c5ce;">
+</span><span style="color:#c0c5ce;">    println!(&quot;</span><span style="color:#a3be8c;">PORT = </span><span style="color:#d08770;">{}</span><span style="color:#c0c5ce;">&quot;, cli.port);
+</span><span style="color:#c0c5ce;">}
+</span><span style="color:#c0c5ce;">
+</span><span style="color:#b48ead;">const </span><span style="color:#d08770;">PORT_RANGE</span><span style="color:#c0c5ce;">: RangeInclusive&lt;</span><span style="color:#b48ead;">usize</span><span style="color:#c0c5ce;">&gt; = </span><span style="color:#d08770;">1</span><span style="color:#c0c5ce;">..=</span><span style="color:#d08770;">65535</span><span style="color:#c0c5ce;">;
+</span><span style="color:#c0c5ce;">
+</span><span style="color:#b48ead;">fn </span><span style="color:#8fa1b3;">port_in_range</span><span style="color:#c0c5ce;">(</span><span style="color:#bf616a;">s</span><span style="color:#c0c5ce;">: &amp;</span><span style="color:#b48ead;">str</span><span style="color:#c0c5ce;">) -&gt; Result&lt;</span><span style="color:#b48ead;">usize</span><span style="color:#c0c5ce;">, String&gt; {
+</span><span style="color:#c0c5ce;">    </span><span style="color:#b48ead;">let</span><span style="color:#c0c5ce;"> port: </span><span style="color:#b48ead;">usize </span><span style="color:#c0c5ce;">= s
+</span><span style="color:#c0c5ce;">        .</span><span style="color:#96b5b4;">parse</span><span style="color:#c0c5ce;">()
+</span><span style="color:#c0c5ce;">        .</span><span style="color:#96b5b4;">map_err</span><span style="color:#c0c5ce;">(|_| format!(&quot;</span><span style="color:#a3be8c;">`</span><span style="color:#d08770;">{}</span><span style="color:#a3be8c;">` isn&#39;t a port number</span><span style="color:#c0c5ce;">&quot;, s))?;
+</span><span style="color:#c0c5ce;">    </span><span style="color:#b48ead;">if </span><span style="color:#d08770;">PORT_RANGE</span><span style="color:#c0c5ce;">.</span><span style="color:#96b5b4;">contains</span><span style="color:#c0c5ce;">(&amp;port) {
+</span><span style="color:#c0c5ce;">        Ok(port)
+</span><span style="color:#c0c5ce;">    } </span><span style="color:#b48ead;">else </span><span style="color:#c0c5ce;">{
+</span><span style="color:#c0c5ce;">        Err(format!(
+</span><span style="color:#c0c5ce;">            &quot;</span><span style="color:#a3be8c;">Port not in range </span><span style="color:#d08770;">{}</span><span style="color:#a3be8c;">-</span><span style="color:#d08770;">{}</span><span style="color:#c0c5ce;">&quot;,
+</span><span style="color:#c0c5ce;">            </span><span style="color:#d08770;">PORT_RANGE</span><span style="color:#c0c5ce;">.</span><span style="color:#96b5b4;">start</span><span style="color:#c0c5ce;">(),
+</span><span style="color:#c0c5ce;">            </span><span style="color:#d08770;">PORT_RANGE</span><span style="color:#c0c5ce;">.</span><span style="color:#96b5b4;">end</span><span style="color:#c0c5ce;">()
+</span><span style="color:#c0c5ce;">        ))
+</span><span style="color:#c0c5ce;">    }
+</span><span style="color:#c0c5ce;">}
+</span></pre>
+<ul>
+<li>relations</li>
+</ul>
+<pre style="background-color:#2b303b;">
+<span style="color:#b48ead;">use </span><span style="color:#c0c5ce;">clap::{ArgGroup, Parser};
+</span><span style="color:#c0c5ce;">
+</span><span style="color:#c0c5ce;">#[</span><span style="color:#bf616a;">derive</span><span style="color:#c0c5ce;">(Parser)]
+</span><span style="color:#c0c5ce;">#[</span><span style="color:#bf616a;">clap</span><span style="color:#c0c5ce;">(author, version, about, long_about = None)]
+</span><span style="color:#c0c5ce;">#[</span><span style="color:#bf616a;">clap</span><span style="color:#c0c5ce;">(</span><span style="color:#8fa1b3;">group</span><span style="color:#c0c5ce;">(
+</span><span style="color:#c0c5ce;">            ArgGroup::</span><span style="color:#8fa1b3;">new</span><span style="color:#c0c5ce;">(&quot;</span><span style="color:#a3be8c;">vers</span><span style="color:#c0c5ce;">&quot;)
+</span><span style="color:#c0c5ce;">                .</span><span style="color:#8fa1b3;">required</span><span style="color:#c0c5ce;">(true)
+</span><span style="color:#c0c5ce;">                .</span><span style="color:#8fa1b3;">args</span><span style="color:#c0c5ce;">(&amp;[&quot;</span><span style="color:#a3be8c;">set-ver</span><span style="color:#c0c5ce;">&quot;, &quot;</span><span style="color:#a3be8c;">major</span><span style="color:#c0c5ce;">&quot;, &quot;</span><span style="color:#a3be8c;">minor</span><span style="color:#c0c5ce;">&quot;, &quot;</span><span style="color:#a3be8c;">patch</span><span style="color:#c0c5ce;">&quot;]),
+</span><span style="color:#c0c5ce;">        ))]
+</span><span style="color:#b48ead;">struct </span><span style="color:#c0c5ce;">Cli {
+</span><span style="color:#c0c5ce;">    </span><span style="color:#65737e;">/// set version manually
+</span><span style="color:#c0c5ce;">    #[clap(long, value_name = &quot;VER&quot;)]
+</span><span style="color:#c0c5ce;">    </span><span style="color:#bf616a;">set_ver</span><span style="color:#c0c5ce;">: Option&lt;String&gt;,
+</span><span style="color:#c0c5ce;">
+</span><span style="color:#c0c5ce;">    </span><span style="color:#65737e;">/// auto inc major
+</span><span style="color:#c0c5ce;">    #[clap(long)]
+</span><span style="color:#c0c5ce;">    </span><span style="color:#bf616a;">major</span><span style="color:#c0c5ce;">: </span><span style="color:#b48ead;">bool</span><span style="color:#c0c5ce;">,
+</span><span style="color:#c0c5ce;">
+</span><span style="color:#c0c5ce;">    </span><span style="color:#65737e;">/// auto inc minor
+</span><span style="color:#c0c5ce;">    #[clap(long)]
+</span><span style="color:#c0c5ce;">    </span><span style="color:#bf616a;">minor</span><span style="color:#c0c5ce;">: </span><span style="color:#b48ead;">bool</span><span style="color:#c0c5ce;">,
+</span><span style="color:#c0c5ce;">
+</span><span style="color:#c0c5ce;">    </span><span style="color:#65737e;">/// auto inc patch
+</span><span style="color:#c0c5ce;">    #[clap(long)]
+</span><span style="color:#c0c5ce;">    </span><span style="color:#bf616a;">patch</span><span style="color:#c0c5ce;">: </span><span style="color:#b48ead;">bool</span><span style="color:#c0c5ce;">,
+</span><span style="color:#c0c5ce;">
+</span><span style="color:#c0c5ce;">    </span><span style="color:#65737e;">/// some regular input
+</span><span style="color:#c0c5ce;">    #[clap(group = &quot;input&quot;)]
+</span><span style="color:#c0c5ce;">    </span><span style="color:#bf616a;">input_file</span><span style="color:#c0c5ce;">: Option&lt;String&gt;,
+</span><span style="color:#c0c5ce;">
+</span><span style="color:#c0c5ce;">    </span><span style="color:#65737e;">/// some special input argument
+</span><span style="color:#c0c5ce;">    #[clap(long, group = &quot;input&quot;)]
+</span><span style="color:#c0c5ce;">    </span><span style="color:#bf616a;">spec_in</span><span style="color:#c0c5ce;">: Option&lt;String&gt;,
+</span><span style="color:#c0c5ce;">
+</span><span style="color:#c0c5ce;">    #[clap(short, requires = &quot;input&quot;)]
+</span><span style="color:#c0c5ce;">    </span><span style="color:#bf616a;">config</span><span style="color:#c0c5ce;">: Option&lt;String&gt;,
+</span><span style="color:#c0c5ce;">}
+</span><span style="color:#c0c5ce;">
+</span><span style="color:#b48ead;">fn </span><span style="color:#8fa1b3;">main</span><span style="color:#c0c5ce;">() {
+</span><span style="color:#c0c5ce;">    </span><span style="color:#b48ead;">let</span><span style="color:#c0c5ce;"> cli = Cli::parse();
+</span><span style="color:#c0c5ce;">
+</span><span style="color:#c0c5ce;">    </span><span style="color:#65737e;">// Let&#39;s assume the old version 1.2.3
+</span><span style="color:#c0c5ce;">    </span><span style="color:#b48ead;">let mut</span><span style="color:#c0c5ce;"> major = </span><span style="color:#d08770;">1</span><span style="color:#c0c5ce;">;
+</span><span style="color:#c0c5ce;">    </span><span style="color:#b48ead;">let mut</span><span style="color:#c0c5ce;"> minor = </span><span style="color:#d08770;">2</span><span style="color:#c0c5ce;">;
+</span><span style="color:#c0c5ce;">    </span><span style="color:#b48ead;">let mut</span><span style="color:#c0c5ce;"> patch = </span><span style="color:#d08770;">3</span><span style="color:#c0c5ce;">;
+</span><span style="color:#c0c5ce;">
+</span><span style="color:#c0c5ce;">    </span><span style="color:#65737e;">// See if --set-ver was used to set the version manually
+</span><span style="color:#c0c5ce;">    </span><span style="color:#b48ead;">let</span><span style="color:#c0c5ce;"> version = </span><span style="color:#b48ead;">if let </span><span style="color:#c0c5ce;">Some(ver) = cli.set_ver.</span><span style="color:#96b5b4;">as_deref</span><span style="color:#c0c5ce;">() {
+</span><span style="color:#c0c5ce;">        ver.</span><span style="color:#96b5b4;">to_string</span><span style="color:#c0c5ce;">()
+</span><span style="color:#c0c5ce;">    } </span><span style="color:#b48ead;">else </span><span style="color:#c0c5ce;">{
+</span><span style="color:#c0c5ce;">        </span><span style="color:#65737e;">// Increment the one requested (in a real program, we&#39;d reset the lower numbers)
+</span><span style="color:#c0c5ce;">        </span><span style="color:#b48ead;">let </span><span style="color:#c0c5ce;">(maj, min, pat) = (cli.major, cli.minor, cli.patch);
+</span><span style="color:#c0c5ce;">        </span><span style="color:#b48ead;">match </span><span style="color:#c0c5ce;">(maj, min, pat) {
+</span><span style="color:#c0c5ce;">            (</span><span style="color:#d08770;">true</span><span style="color:#c0c5ce;">, _, _) =&gt; major += </span><span style="color:#d08770;">1</span><span style="color:#c0c5ce;">,
+</span><span style="color:#c0c5ce;">            (_, </span><span style="color:#d08770;">true</span><span style="color:#c0c5ce;">, _) =&gt; minor += </span><span style="color:#d08770;">1</span><span style="color:#c0c5ce;">,
+</span><span style="color:#c0c5ce;">            (_, _, </span><span style="color:#d08770;">true</span><span style="color:#c0c5ce;">) =&gt; patch += </span><span style="color:#d08770;">1</span><span style="color:#c0c5ce;">,
+</span><span style="color:#c0c5ce;">            _ =&gt; unreachable!(),
+</span><span style="color:#c0c5ce;">        };
+</span><span style="color:#c0c5ce;">        format!(&quot;</span><span style="color:#d08770;">{}</span><span style="color:#a3be8c;">.</span><span style="color:#d08770;">{}</span><span style="color:#a3be8c;">.</span><span style="color:#d08770;">{}</span><span style="color:#c0c5ce;">&quot;, major, minor, patch)
+</span><span style="color:#c0c5ce;">    };
+</span><span style="color:#c0c5ce;">
+</span><span style="color:#c0c5ce;">    println!(&quot;</span><span style="color:#a3be8c;">Version: </span><span style="color:#d08770;">{}</span><span style="color:#c0c5ce;">&quot;, version);
+</span><span style="color:#c0c5ce;">
+</span><span style="color:#c0c5ce;">    </span><span style="color:#65737e;">// Check for usage of -c
+</span><span style="color:#c0c5ce;">    </span><span style="color:#b48ead;">if let </span><span style="color:#c0c5ce;">Some(config) = cli.config.</span><span style="color:#96b5b4;">as_deref</span><span style="color:#c0c5ce;">() {
+</span><span style="color:#c0c5ce;">        </span><span style="color:#b48ead;">let</span><span style="color:#c0c5ce;"> input = cli
+</span><span style="color:#c0c5ce;">            .input_file
+</span><span style="color:#c0c5ce;">            .</span><span style="color:#96b5b4;">as_deref</span><span style="color:#c0c5ce;">()
+</span><span style="color:#c0c5ce;">            .</span><span style="color:#96b5b4;">unwrap_or_else</span><span style="color:#c0c5ce;">(|| cli.spec_in.</span><span style="color:#96b5b4;">as_deref</span><span style="color:#c0c5ce;">().</span><span style="color:#96b5b4;">unwrap</span><span style="color:#c0c5ce;">());
+</span><span style="color:#c0c5ce;">        println!(&quot;</span><span style="color:#a3be8c;">Doing work using input </span><span style="color:#d08770;">{}</span><span style="color:#a3be8c;"> and config </span><span style="color:#d08770;">{}</span><span style="color:#c0c5ce;">&quot;, input, config);
+</span><span style="color:#c0c5ce;">    }
+</span><span style="color:#c0c5ce;">}
+</span></pre>
+<ul>
+<li>custom</li>
+</ul>
+<pre style="background-color:#2b303b;">
+<span style="color:#b48ead;">use </span><span style="color:#c0c5ce;">clap::{CommandFactory, ErrorKind, Parser};
+</span><span style="color:#c0c5ce;">
+</span><span style="color:#c0c5ce;">#[</span><span style="color:#bf616a;">derive</span><span style="color:#c0c5ce;">(Parser)]
+</span><span style="color:#c0c5ce;">#[</span><span style="color:#bf616a;">clap</span><span style="color:#c0c5ce;">(author, version, about, long_about = None)]
+</span><span style="color:#b48ead;">struct </span><span style="color:#c0c5ce;">Cli {
+</span><span style="color:#c0c5ce;">    </span><span style="color:#65737e;">/// set version manually
+</span><span style="color:#c0c5ce;">    #[clap(long, value_name = &quot;VER&quot;)]
+</span><span style="color:#c0c5ce;">    </span><span style="color:#bf616a;">set_ver</span><span style="color:#c0c5ce;">: Option&lt;String&gt;,
+</span><span style="color:#c0c5ce;">
+</span><span style="color:#c0c5ce;">    </span><span style="color:#65737e;">/// auto inc major
+</span><span style="color:#c0c5ce;">    #[clap(long)]
+</span><span style="color:#c0c5ce;">    </span><span style="color:#bf616a;">major</span><span style="color:#c0c5ce;">: </span><span style="color:#b48ead;">bool</span><span style="color:#c0c5ce;">,
+</span><span style="color:#c0c5ce;">
+</span><span style="color:#c0c5ce;">    </span><span style="color:#65737e;">/// auto inc minor
+</span><span style="color:#c0c5ce;">    #[clap(long)]
+</span><span style="color:#c0c5ce;">    </span><span style="color:#bf616a;">minor</span><span style="color:#c0c5ce;">: </span><span style="color:#b48ead;">bool</span><span style="color:#c0c5ce;">,
+</span><span style="color:#c0c5ce;">
+</span><span style="color:#c0c5ce;">    </span><span style="color:#65737e;">/// auto inc patch
+</span><span style="color:#c0c5ce;">    #[clap(long)]
+</span><span style="color:#c0c5ce;">    </span><span style="color:#bf616a;">patch</span><span style="color:#c0c5ce;">: </span><span style="color:#b48ead;">bool</span><span style="color:#c0c5ce;">,
+</span><span style="color:#c0c5ce;">
+</span><span style="color:#c0c5ce;">    </span><span style="color:#65737e;">/// some regular input
+</span><span style="color:#c0c5ce;">    </span><span style="color:#bf616a;">input_file</span><span style="color:#c0c5ce;">: Option&lt;String&gt;,
+</span><span style="color:#c0c5ce;">
+</span><span style="color:#c0c5ce;">    </span><span style="color:#65737e;">/// some special input argument
+</span><span style="color:#c0c5ce;">    #[clap(long)]
+</span><span style="color:#c0c5ce;">    </span><span style="color:#bf616a;">spec_in</span><span style="color:#c0c5ce;">: Option&lt;String&gt;,
+</span><span style="color:#c0c5ce;">
+</span><span style="color:#c0c5ce;">    #[clap(short)]
+</span><span style="color:#c0c5ce;">    </span><span style="color:#bf616a;">config</span><span style="color:#c0c5ce;">: Option&lt;String&gt;,
+</span><span style="color:#c0c5ce;">}
+</span><span style="color:#c0c5ce;">
+</span><span style="color:#b48ead;">fn </span><span style="color:#8fa1b3;">main</span><span style="color:#c0c5ce;">() {
+</span><span style="color:#c0c5ce;">    </span><span style="color:#b48ead;">let</span><span style="color:#c0c5ce;"> cli = Cli::parse();
+</span><span style="color:#c0c5ce;">
+</span><span style="color:#c0c5ce;">    </span><span style="color:#65737e;">// Let&#39;s assume the old version 1.2.3
+</span><span style="color:#c0c5ce;">    </span><span style="color:#b48ead;">let mut</span><span style="color:#c0c5ce;"> major = </span><span style="color:#d08770;">1</span><span style="color:#c0c5ce;">;
+</span><span style="color:#c0c5ce;">    </span><span style="color:#b48ead;">let mut</span><span style="color:#c0c5ce;"> minor = </span><span style="color:#d08770;">2</span><span style="color:#c0c5ce;">;
+</span><span style="color:#c0c5ce;">    </span><span style="color:#b48ead;">let mut</span><span style="color:#c0c5ce;"> patch = </span><span style="color:#d08770;">3</span><span style="color:#c0c5ce;">;
+</span><span style="color:#c0c5ce;">
+</span><span style="color:#c0c5ce;">    </span><span style="color:#65737e;">// See if --set-ver was used to set the version manually
+</span><span style="color:#c0c5ce;">    </span><span style="color:#b48ead;">let</span><span style="color:#c0c5ce;"> version = </span><span style="color:#b48ead;">if let </span><span style="color:#c0c5ce;">Some(ver) = cli.set_ver.</span><span style="color:#96b5b4;">as_deref</span><span style="color:#c0c5ce;">() {
+</span><span style="color:#c0c5ce;">        </span><span style="color:#b48ead;">if</span><span style="color:#c0c5ce;"> cli.major || cli.minor || cli.patch {
+</span><span style="color:#c0c5ce;">            </span><span style="color:#b48ead;">let mut</span><span style="color:#c0c5ce;"> cmd = Cli::command();
+</span><span style="color:#c0c5ce;">            cmd.</span><span style="color:#96b5b4;">error</span><span style="color:#c0c5ce;">(
+</span><span style="color:#c0c5ce;">                ErrorKind::ArgumentConflict,
+</span><span style="color:#c0c5ce;">                &quot;</span><span style="color:#a3be8c;">Can&#39;t do relative and absolute version change</span><span style="color:#c0c5ce;">&quot;,
+</span><span style="color:#c0c5ce;">            )
+</span><span style="color:#c0c5ce;">            .</span><span style="color:#96b5b4;">exit</span><span style="color:#c0c5ce;">();
+</span><span style="color:#c0c5ce;">        }
+</span><span style="color:#c0c5ce;">        ver.</span><span style="color:#96b5b4;">to_string</span><span style="color:#c0c5ce;">()
+</span><span style="color:#c0c5ce;">    } </span><span style="color:#b48ead;">else </span><span style="color:#c0c5ce;">{
+</span><span style="color:#c0c5ce;">        </span><span style="color:#65737e;">// Increment the one requested (in a real program, we&#39;d reset the lower numbers)
+</span><span style="color:#c0c5ce;">        </span><span style="color:#b48ead;">let </span><span style="color:#c0c5ce;">(maj, min, pat) = (cli.major, cli.minor, cli.patch);
+</span><span style="color:#c0c5ce;">        </span><span style="color:#b48ead;">match </span><span style="color:#c0c5ce;">(maj, min, pat) {
+</span><span style="color:#c0c5ce;">            (</span><span style="color:#d08770;">true</span><span style="color:#c0c5ce;">, </span><span style="color:#d08770;">false</span><span style="color:#c0c5ce;">, </span><span style="color:#d08770;">false</span><span style="color:#c0c5ce;">) =&gt; major += </span><span style="color:#d08770;">1</span><span style="color:#c0c5ce;">,
+</span><span style="color:#c0c5ce;">            (</span><span style="color:#d08770;">false</span><span style="color:#c0c5ce;">, </span><span style="color:#d08770;">true</span><span style="color:#c0c5ce;">, </span><span style="color:#d08770;">false</span><span style="color:#c0c5ce;">) =&gt; minor += </span><span style="color:#d08770;">1</span><span style="color:#c0c5ce;">,
+</span><span style="color:#c0c5ce;">            (</span><span style="color:#d08770;">false</span><span style="color:#c0c5ce;">, </span><span style="color:#d08770;">false</span><span style="color:#c0c5ce;">, </span><span style="color:#d08770;">true</span><span style="color:#c0c5ce;">) =&gt; patch += </span><span style="color:#d08770;">1</span><span style="color:#c0c5ce;">,
+</span><span style="color:#c0c5ce;">            _ =&gt; {
+</span><span style="color:#c0c5ce;">                </span><span style="color:#b48ead;">let mut</span><span style="color:#c0c5ce;"> cmd = Cli::command();
+</span><span style="color:#c0c5ce;">                cmd.</span><span style="color:#96b5b4;">error</span><span style="color:#c0c5ce;">(
+</span><span style="color:#c0c5ce;">                    ErrorKind::ArgumentConflict,
+</span><span style="color:#c0c5ce;">                    &quot;</span><span style="color:#a3be8c;">Can only modify one version field</span><span style="color:#c0c5ce;">&quot;,
+</span><span style="color:#c0c5ce;">                )
+</span><span style="color:#c0c5ce;">                .</span><span style="color:#96b5b4;">exit</span><span style="color:#c0c5ce;">();
+</span><span style="color:#c0c5ce;">            }
+</span><span style="color:#c0c5ce;">        };
+</span><span style="color:#c0c5ce;">        format!(&quot;</span><span style="color:#d08770;">{}</span><span style="color:#a3be8c;">.</span><span style="color:#d08770;">{}</span><span style="color:#a3be8c;">.</span><span style="color:#d08770;">{}</span><span style="color:#c0c5ce;">&quot;, major, minor, patch)
+</span><span style="color:#c0c5ce;">    };
+</span><span style="color:#c0c5ce;">
+</span><span style="color:#c0c5ce;">    println!(&quot;</span><span style="color:#a3be8c;">Version: </span><span style="color:#d08770;">{}</span><span style="color:#c0c5ce;">&quot;, version);
+</span><span style="color:#c0c5ce;">
+</span><span style="color:#c0c5ce;">    </span><span style="color:#65737e;">// Check for usage of -c
+</span><span style="color:#c0c5ce;">    </span><span style="color:#b48ead;">if let </span><span style="color:#c0c5ce;">Some(config) = cli.config.</span><span style="color:#96b5b4;">as_deref</span><span style="color:#c0c5ce;">() {
+</span><span style="color:#c0c5ce;">        </span><span style="color:#65737e;">// todo: remove `#[allow(clippy::or_fun_call)]` lint when MSRV is bumped.
+</span><span style="color:#c0c5ce;">        #[</span><span style="color:#bf616a;">allow</span><span style="color:#c0c5ce;">(clippy::or_fun_call)]
+</span><span style="color:#c0c5ce;">        </span><span style="color:#b48ead;">let</span><span style="color:#c0c5ce;"> input = cli
+</span><span style="color:#c0c5ce;">            .input_file
+</span><span style="color:#c0c5ce;">            .</span><span style="color:#96b5b4;">as_deref</span><span style="color:#c0c5ce;">()
+</span><span style="color:#c0c5ce;">            </span><span style="color:#65737e;">// &#39;or&#39; is preferred to &#39;or_else&#39; here since `Option::as_deref` is &#39;const&#39;
+</span><span style="color:#c0c5ce;">            .</span><span style="color:#96b5b4;">or</span><span style="color:#c0c5ce;">(cli.spec_in.</span><span style="color:#96b5b4;">as_deref</span><span style="color:#c0c5ce;">())
+</span><span style="color:#c0c5ce;">            .</span><span style="color:#96b5b4;">unwrap_or_else</span><span style="color:#c0c5ce;">(|| {
+</span><span style="color:#c0c5ce;">                </span><span style="color:#b48ead;">let mut</span><span style="color:#c0c5ce;"> cmd = Cli::command();
+</span><span style="color:#c0c5ce;">                cmd.</span><span style="color:#96b5b4;">error</span><span style="color:#c0c5ce;">(
+</span><span style="color:#c0c5ce;">                    ErrorKind::MissingRequiredArgument,
+</span><span style="color:#c0c5ce;">                    &quot;</span><span style="color:#a3be8c;">INPUT_FILE or --spec-in is required when using --config</span><span style="color:#c0c5ce;">&quot;,
+</span><span style="color:#c0c5ce;">                )
+</span><span style="color:#c0c5ce;">                .</span><span style="color:#96b5b4;">exit</span><span style="color:#c0c5ce;">()
+</span><span style="color:#c0c5ce;">            });
+</span><span style="color:#c0c5ce;">        println!(&quot;</span><span style="color:#a3be8c;">Doing work using input </span><span style="color:#d08770;">{}</span><span style="color:#a3be8c;"> and config </span><span style="color:#d08770;">{}</span><span style="color:#c0c5ce;">&quot;, input, config);
+</span><span style="color:#c0c5ce;">    }
+</span><span style="color:#c0c5ce;">}
+</span></pre>
+<ul>
+<li>asserts</li>
+</ul>
+<pre style="background-color:#2b303b;">
+<span style="color:#b48ead;">use </span><span style="color:#c0c5ce;">clap::Parser;
+</span><span style="color:#c0c5ce;">
+</span><span style="color:#c0c5ce;">#[</span><span style="color:#bf616a;">derive</span><span style="color:#c0c5ce;">(Parser)]
+</span><span style="color:#c0c5ce;">#[</span><span style="color:#bf616a;">clap</span><span style="color:#c0c5ce;">(author, version, about, long_about = None)]
+</span><span style="color:#b48ead;">struct </span><span style="color:#c0c5ce;">Cli {
+</span><span style="color:#c0c5ce;">    </span><span style="color:#65737e;">/// Network port to use
+</span><span style="color:#c0c5ce;">    #[clap(parse(try_from_str))]
+</span><span style="color:#c0c5ce;">    </span><span style="color:#bf616a;">port</span><span style="color:#c0c5ce;">: </span><span style="color:#b48ead;">usize</span><span style="color:#c0c5ce;">,
+</span><span style="color:#c0c5ce;">}
+</span><span style="color:#c0c5ce;">
+</span><span style="color:#b48ead;">fn </span><span style="color:#8fa1b3;">main</span><span style="color:#c0c5ce;">() {
+</span><span style="color:#c0c5ce;">    </span><span style="color:#b48ead;">let</span><span style="color:#c0c5ce;"> cli = Cli::parse();
+</span><span style="color:#c0c5ce;">
+</span><span style="color:#c0c5ce;">    println!(&quot;</span><span style="color:#a3be8c;">PORT = </span><span style="color:#d08770;">{}</span><span style="color:#c0c5ce;">&quot;, cli.port);
+</span><span style="color:#c0c5ce;">}
+</span><span style="color:#c0c5ce;">
+</span><span style="color:#c0c5ce;">#[</span><span style="color:#bf616a;">test</span><span style="color:#c0c5ce;">]
+</span><span style="color:#b48ead;">fn </span><span style="color:#8fa1b3;">verify_app</span><span style="color:#c0c5ce;">() {
+</span><span style="color:#c0c5ce;">    </span><span style="color:#b48ead;">use </span><span style="color:#c0c5ce;">clap::CommandFactory;
+</span><span style="color:#c0c5ce;">    Cli::command().</span><span style="color:#96b5b4;">debug_assert</span><span style="color:#c0c5ce;">()
+</span><span style="color:#c0c5ce;">}
+</span></pre>
+    </main>
+    <footer>
+      <div class="inner">
+  <p>Made by SJQ! 🐼</p>
+</div>
+    </footer>
+  </body>
+</html>
